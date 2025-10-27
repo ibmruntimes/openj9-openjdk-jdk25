@@ -559,11 +559,6 @@ AC_DEFUN([OPENJ9_PLATFORM_SETUP],
     OPENJ9_PLATFORM_CODE=xz64
   elif test "x$OPENJ9_CPU" = xppc-64 ; then
     OPENJ9_PLATFORM_CODE=ap64
-  elif test "x$OPENJ9_CPU" = xarm ; then
-    OPENJ9_PLATFORM_CODE=xr32
-    OPENJ9_BUILD_OS=linux
-    OPENJ9_BUILD_MODE_ARCH=arm_linaro
-    OPENJ9_LIBS_SUBDIR=default
   elif test "x$OPENJ9_CPU" = xaarch64 ; then
     if test "x$OPENJDK_BUILD_OS" = xlinux ; then
       OPENJ9_PLATFORM_CODE=xr64
@@ -637,6 +632,42 @@ AC_DEFUN_ONCE([CUSTOM_LATE_HOOK],
   if test "x[$with_output_sync]" = x ; then
     OUTPUT_SYNC_SUPPORTED=false
   fi
+
+  AC_MSG_CHECKING([whether to enable link-time optimization])
+  AC_ARG_ENABLE([lto], [AS_HELP_STRING([--enable-lto],
+    [enable link-time optimization, optionally just for jdk or vm binaries @<:@disabled@:>@])])
+
+  OPENJ9_ENABLE_LINK_OPT=false
+  case "x$enable_lto" in
+    xjdk | xvm | xyes)
+      if test "x$TOOLCHAIN_TYPE" != "xgcc" ; then
+        AC_MSG_ERROR([Link-time optimization is only supported with gcc])
+      else
+        if test "x$enable_lto" = xyes ; then
+          AC_MSG_RESULT([yes])
+        fi
+        if test "x$enable_lto" = xjdk ; then
+          AC_MSG_RESULT([jdk only])
+        else
+          OPENJ9_ENABLE_LINK_OPT=true
+        fi
+        if test "x$enable_lto" = xvm ; then
+          AC_MSG_RESULT([vm only])
+        else
+          EXTRA_CFLAGS="$EXTRA_CFLAGS -flto"
+          EXTRA_CXXFLAGS="$EXTRA_CXXFLAGS -flto"
+          EXTRA_LDFLAGS="$EXTRA_LDFLAGS -flto"
+        fi
+      fi
+      ;;
+    x | xno)
+      AC_MSG_RESULT([no])
+      ;;
+    *)
+      AC_MSG_ERROR([Link-time optimization options are: jdk, vm, yes])
+      ;;
+  esac
+  AC_SUBST(OPENJ9_ENABLE_LINK_OPT)
 
   if test "x$OPENJDK_BUILD_OS" = xwindows ; then
     OPENJ9_TOOL_DIR="$OUTPUTDIR/tools"
