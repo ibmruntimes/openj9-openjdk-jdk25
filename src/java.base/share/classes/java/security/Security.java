@@ -538,7 +538,6 @@ public final class Security {
      */
     public static synchronized int insertProviderAt(Provider provider,
             int position) {
-
         ProviderList list = Providers.getFullProviderList();
 
         /*[IF CRIU_SUPPORT]*/
