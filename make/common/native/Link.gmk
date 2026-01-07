@@ -22,6 +22,9 @@
 # or visit www.oracle.com if you need additional information or have any
 # questions.
 #
+# ===========================================================================
+# (c) Copyright IBM Corp. 2025, 2026 All Rights Reserved
+# ===========================================================================
 
 include MakeIncludeStart.gmk
 ifeq ($(INCLUDE), true)
@@ -133,9 +136,9 @@ define CreateDynamicLibraryOrExecutable
     # Generating a dynamic library.
     $1_EXTRA_LDFLAGS += $$(call SET_SHARED_LIBRARY_NAME,$$($1_BASENAME))
 
-    # Create loadmap on AIX. Helps in diagnosing some problems.
-    ifneq ($(COMPILER_BINDCMD_FILE_FLAG), )
-      $1_EXTRA_LDFLAGS += $(COMPILER_BINDCMD_FILE_FLAG)$$($1_OBJECT_DIR)/$$($1_NOSUFFIX).loadmap
+    ifeq ($(call isTargetOs, aix), true)
+      # Create loadmap on AIX. Helps in diagnosing some problems.
+      $1_EXTRA_LDFLAGS += -Wl,-bloadmap:$$($1_OBJECT_DIR)/$$($1_NOSUFFIX).loadmap
     endif
   endif
 
