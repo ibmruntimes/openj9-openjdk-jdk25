@@ -79,6 +79,8 @@ requires.properties= \
     vm.rtm.cpu \
     vm.rtm.compiler \
     vm.cds \
+    vm.cds.default.archive.available \
+    vm.cds.nocoops.archive.available \
     vm.cds.custom.loaders \
     vm.cds.supports.aot.class.linking \
     vm.cds.supports.aot.code.caching \
@@ -105,7 +107,7 @@ requires.properties= \
 requires.extraPropDefns = [../../../closed/test/jtreg-ext/requires/OpenJ9PropsExt.java]
 
 # Minimum jtreg version
-requiredVersion=7.5.1+1
+requiredVersion=8+2
 
 # Path to libraries in the topmost test directory. This is needed so @library
 # does not need ../../../ notation to reach them
