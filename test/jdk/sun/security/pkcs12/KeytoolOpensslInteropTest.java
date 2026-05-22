@@ -138,6 +138,11 @@ public class KeytoolOpensslInteropTest {
                 "pass:changeit", "-certpbe", "AES-256-CBC", "-keypbe",
                 "AES-256-CBC", "-macalg", "SHA512")
                 .shouldHaveExitValue(0);
+
+        ProcessTools.executeCommand(opensslPath, "pkcs12", "-export", "-in",
+                        "kandc", "-out", "os6", "-name", "a", "-passout",
+                        "pass:changeit", "-pbmac1_pbkdf2", "-macalg", "sha256")
+                .shouldHaveExitValue(0);
     }
 
     private static void testWithJavaCommands() throws Throwable {
@@ -168,6 +173,15 @@ public class KeytoolOpensslInteropTest {
         // no storepass no cert
         check("os5", "a", null, "changeit", true, false, true);
 
+<<<<<<< HEAD
+=======
+        if (Security.getProperty("com.ibm.fips.mode") == null) {
+            check("os6", "a", "changeit", "changeit", true, true, true);
+        } else {
+            check("os6FIPSCompliant", "a", "changeitlongversion", "changeitlongversion", true, true, true);
+        }
+
+>>>>>>> c839c713089 (Update KeytoolOpensslInteropTest to use FIPS Compliant pkcs12 file)
         // keytool
 
         // Current default pkcs12 setting
