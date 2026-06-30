@@ -25,7 +25,7 @@
 
 /*
  * ===========================================================================
- * (c) Copyright IBM Corp. 2022, 2025 All Rights Reserved
+ * (c) Copyright IBM Corp. 2022, 2026 All Rights Reserved
  * ===========================================================================
  */
 
@@ -1247,7 +1247,7 @@ public abstract class Provider extends Properties {
             throw new IllegalArgumentException
                     ("service.getProvider() must match this Provider object");
         }
-        if (!RestrictedSecurity.canServiceBeRegistered(s)) {
+        if (!RestrictedSecurity.canServiceBeRegistered(s, s.getAliases())) {
             // We're in restricted security mode which does not allow this service,
             // return without registering.
             return;
