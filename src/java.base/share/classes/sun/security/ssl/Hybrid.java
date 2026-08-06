@@ -23,12 +23,6 @@
  * questions.
  */
 
-/*
- * ===========================================================================
- * (c) Copyright IBM Corp. 2026, 2026 All Rights Reserved
- * ===========================================================================
- */
-
 package sun.security.ssl;
 
 import sun.security.util.ArrayUtil;
@@ -124,8 +118,6 @@ public class Hybrid {
         private final KeyPairGenerator right;
         private final AlgorithmParameterSpec leftSpec;
         private final AlgorithmParameterSpec rightSpec;
-        private String leftAlg;
-        private String rightAlg;
 
         public KeyPairGeneratorImpl(String leftAlg, String rightAlg)
                 throws NoSuchAlgorithmException  {
@@ -133,8 +125,6 @@ public class Hybrid {
             right = getKeyPairGenerator(rightAlg);
             leftSpec = getSpec(leftAlg);
             rightSpec = getSpec(rightAlg);
-            this.leftAlg = leftAlg;
-            this.rightAlg = rightAlg;
         }
 
         @Override
@@ -275,15 +265,11 @@ public class Hybrid {
     public static class KEMImpl implements KEMSpi {
         private final KEM left;
         private final KEM right;
-        private String leftname;
-        private String rightname;
 
         public KEMImpl(String left, String right)
                 throws NoSuchAlgorithmException {
             this.left = getKEM(left);
             this.right = getKEM(right);
-            leftname = left;
-            rightname = right;
         }
 
         @Override
